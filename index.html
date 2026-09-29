@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simples Nacional — Anexo I Comércio | Cálculo do DAS + Crédito NF</title>
+<style>
+:root{
+  --bg:#f1f5f9; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --muted2:#94a3b8;
+  --navy:#0a1128; --blue:#2563eb; --blue-dark:#1e40af;
+  --border:#e2e8f0; --border2:#cbd5e1;
+  --pink-bg:#fce7f3; --pink:#db2777;
+  --green:#16a34a; --green-bg:#dcfce7;
+  --yellow-bg:#fef9c3;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+.topbar{background:var(--navy);color:#fff;padding:32px 24px 40px;text-align:center}
+.topbar h1{margin:0;font-size:1.4rem;font-weight:800;letter-spacing:.01em}
+.topbar p{margin:10px auto 0;font-size:.85rem;color:var(--muted2);max-width:760px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 60px;margin-top:-24px}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+@media(max-width:950px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card-h{background:#fff;color:var(--ink);font-weight:800;font-size:.85rem;padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.tag{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 6px;border-radius:6px;background:var(--pink-bg);color:var(--pink);font-weight:800;font-size:.8rem}
+.card-b{padding:16px}
+label{font-size:.8rem;font-weight:700;color:#334155;display:block;margin:12px 0 6px}
+label:first-child{margin-top:0}
+input[type=text]{width:100%;padding:11px 14px;font-size:1rem;border:1px solid var(--border2);border-radius:10px;outline:none;background:#fff}
+input[type=text]:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+input.hl{background:#fff;border-color:var(--border2);font-weight:700}
+input[readonly]{background:#f8fafc;color:var(--ink)}
+.search{border-radius:10px}
+.hint{font-size:.75rem;color:var(--muted);margin-top:4px;line-height:1.5}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+button{border:none;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer;font-size:.85rem}
+.btn-calc{background:var(--pill);color:#fff;flex:1}
+.btn-calc:hover{background:#1e293b}
+.btn-ex{background:#fff;color:#334155;border:1px solid var(--border2)}
+.btn-ex:hover{border-color:var(--ink)}
+.btn-print{background:var(--blue);color:#fff}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:#fff;color:#475569}
+.pill.on{background:var(--pill);color:#fff;border-color:var(--pill)}
+.formula{background:#f8fafc;border:1px dashed #94a3b8;border-radius:10px;padding:12px;font-size:.85rem;margin-top:12px;line-height:1.6}
+.formula b{background:#bbf7d0;padding:2px 10px;border-radius:6px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+@media(max-width:600px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
+.kpi small{display:block;font-size:.66rem;font-weight:800;color:var(--muted);text-transform:uppercase}
+.kpi strong{font-size:.95rem}
+.kpi.ef strong{color:var(--blue-dark)}
+table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+th{background:var(--navy);color:#fff;padding:9px 8px;font-size:.7rem;text-transform:uppercase}
+th:first-child{border-radius:0} 
+td{border:1px solid #e2e8f0;padding:8px;text-align:center;background:#fff}
+td.l{text-align:left;font-weight:600}
+td.n{font-variant-numeric:tabular-nums}
+tr.atual td{background:var(--yellow-bg);font-weight:800}
+.total-das{background:var(--navy);color:#fff;font-weight:800;font-size:.95rem;padding:14px 16px;border-radius:10px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.total-das span:last-child{font-size:1.35rem}
+.credito{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:14px}
+.credito-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.credito-grid{grid-template-columns:1fr}}
+.cred-val{background:var(--navy);color:#fff;border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-weight:800}
+.cred-val span:last-child{font-size:1.3rem}
+.obs{background:#fff;border:1px solid var(--border2);border-radius:8px;padding:10px;font-size:.78rem;margin-top:10px;line-height:1.5}
+.btn-copy{background:#fff;border:1px solid var(--border2);padding:8px 12px;font-size:.78rem;margin-top:8px}
+.btn-copy:hover{border-color:var(--ink)}
+.foot{font-size:.75rem;color:var(--muted);margin-top:14px;line-height:1.6}
+.blue{color:var(--blue);font-weight:800}
+@media print{.btnrow,.no-print{display:none}.wrap{margin-top:0}body{background:#fff}.card{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>Consulta Simples Nacional → Anexo I Comércio e Crédito de ICMS</h1>
+  <p>Selecione a RBT12 do mês anterior e veja o DAS do comércio (Anexo I), a repartição dos tributos e o crédito de ICMS da nota fiscal para empresa do Lucro Normal (art. 23 da LC 123/2006).</p>
+</div>
+
+<div class="wrap">
+<div class="grid">
+  <div class="card">
+    <div class="card-h"><span class="tag">L</span> Anexo I — Comércio · DAS (LC 123/2006)</div>
+    <div class="card-b">
+      <span class="pill on">RBT12 = mês anterior</span> <span class="pill">Entradas brancas = digitação</span>
+
+      <label for="rbt12">Receita Bruta dos Últimos 12 Meses — RBT12 do mês anterior à emissão — R$</label>
+      <input type="text" id="rbt12" class="hl search" inputmode="numeric" placeholder="Ex.: 560.548,70" value="560.548,70">
+      <div class="hint">Para o <b>crédito da NF</b> use a RBT12 do <b>mês anterior ao da emissão</b>, mesma base do PGDAS-D. Soma dos 12 meses anteriores ao período de apuração.</div>
+
+      <label for="recNormal">Revenda de Mercadorias no mês (sem ST) — R$</label>
+      <input type="text" id="recNormal" class="hl" inputmode="numeric" placeholder="Ex.: 50.000,00" value="0,00">
+
+      <label for="recST">Revenda de Mercadorias no mês com ICMS/ST — R$</label>
+      <input type="text" id="recST" class="hl" inputmode="numeric" placeholder="Ex.: 10.000,00" value="0,00">
+      <div class="hint">Com ST o ICMS já foi recolhido na cadeia → DAS exclui a parcela do ICMS (art. 13, §1º, XIII).</div>
+
+      <div class="btnrow">
+        <button class="btn-calc" onclick="calcular()">CALCULAR</button>
+        <button class="btn-ex" onclick="exemplo()">Exemplo</button>
+        <button class="btn-ex" onclick="limpar()">Limpar</button>
+        <button class="btn-print" onclick="window.print()">Imprimir</button>
+      </div>
+
+      <div class="formula" id="memoria"></div>
+
+      <div class="kpis">
+        <div class="kpi"><small>Faixa</small><strong id="kFaixa">3ª</strong></div>
+        <div class="kpi"><small>Alíquota nominal</small><strong id="kAliq">9,50%</strong></div>
+        <div class="kpi"><small>Valor a deduzir</small><strong id="kPD">R$ 13.860,00</strong></div>
+        <div class="kpi ef"><small>Alíquota efetiva</small><strong id="kEf">7,02742%</strong></div>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><small>Efetiva sem ICMS (ST)</small><strong id="kEfST">—</strong></div>
+        <div class="kpi"><small>% ICMS faixa</small><strong id="kICMS">—</strong></div>
+        <div class="kpi"><small>Alíquota crédito NF</small><strong id="kCredAliq" class="blue">—</strong></div>
+        <div class="kpi"><small>Teto Anexo I</small><strong>R$ 4,8 MI</strong></div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <div class="card-h"><span class="tag">D</span> Receita × Alíquota efetiva = DAS do mês</div>
+        <table>
+          <thead><tr><th></th><th>Receita</th><th>Alíquota</th><th>DAS</th></tr></thead>
+          <tbody>
+            <tr><td class="l">Revenda s/ ST</td><td class="n" id="tRecN">—</td><td class="n" id="tAliqN">—</td><td class="n" id="tDasN">—</td></tr>
+            <tr><td class="l">Revenda c/ ST</td><td class="n" id="tRecS">—</td><td class="n" id="tAliqS">—</td><td class="n" id="tDasS">—</td></tr>
+            <tr style="font-weight:800"><td class="l" colspan="3" style="text-align:right">TOTAL DO MÊS</td><td class="n" id="tDasT">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="total-das"><span>VALOR DO DAS — SIMPLES NACIONAL</span><span id="dasTotal">R$ 0,00</span></div>
+
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <div class="card-h"><span class="tag">C</span> Crédito de ICMS na NF — art. 23 LC 123/2006</div>
+      <div class="card-b">
+        <div class="hint">Emitente Simples → destinatário Lucro Real/Presumido (regime normal do ICMS), mercadoria para <b>comercialização ou industrialização</b>. Usa a <b>mesma RBT12 do mês anterior</b> acima. Alíquota do crédito preenchida automaticamente.</div>
+        <div class="credito-grid" style="margin-top:10px">
+          <div>
+            <label for="valorNF">Valor da nota fiscal (receita da NF) — R$</label>
+            <input type="text" id="valorNF" class="hl" inputmode="numeric" placeholder="Ex.: 5.780,00" value="5.780,00">
+          </div>
+          <div>
+            <label for="aliqCredito">Alíquota do crédito (automática) — %</label>
+            <input type="text" id="aliqCredito" readonly tabindex="-1">
+          </div>
+        </div>
+        <div class="cred-val"><span>VALOR DO CRÉDITO DE ICMS</span><span id="credTotal">R$ 0,00</span></div>
+        <div class="obs" id="obsNF"></div>
+        <button class="btn-copy" onclick="copiarObs()">Copiar texto p/ Inf. Complementares</button>
+        <div class="hint" id="credAviso" style="margin-top:8px"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-h"><span class="tag">F</span> Faixas · Alíquota · Valor a deduzir — RBT12</div>
+      <div class="card-b" style="padding-top:8px">
+        <table id="tabFaixas">
+          <thead><tr><th>Faixa</th><th>De</th><th>Até</th><th>Alíquota</th><th>Deduzir</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-h"><span class="tag">R</span> Repartição dos tributos — Anexo I</div>
+      <div class="card-b" style="padding-top:8px">
+        <table id="tabRep">
+          <thead><tr><th>Faixa</th><th>IRPJ</th><th>CSLL</th><th>Cofins</th><th>PIS</th><th>CPP</th><th>ICMS</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-h"><span class="tag">E</span> Repartição efetiva + valores em R$</div>
+      <div class="card-b" style="padding-top:8px">
+        <div class="hint" id="repInfo"></div>
+        <table id="tabEfet">
+          <thead><tr><th>Tributo</th><th>% repart.</th><th>% efetivo</th><th>R$ s/ ST</th><th>R$ c/ ST</th></tr></thead>
+          <tbody></tbody>
+          <tfoot><tr style="font-weight:800"><td class="l">TOTAL</td><td class="n">100,00%</td><td class="n" id="fEf">—</td><td class="n" id="fValN">—</td><td class="n" id="fValS">—</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  <b>DAS:</b> LC 123/2006, arts. 13, 18 e Anexos (LC 155/2016). Efetiva = [(RBT12 × nominal) − PD] ÷ RBT12. Com ST: efetiva × (1 − %ICMS).
+  <b>Crédito NF:</b> art. 23 da LC 123/2006. Adquirente não optante tem direito a crédito de ICMS limitado ao ICMS efetivamente devido no Simples: <b>NF × (efetiva × %ICMS)</b>, só p/ comercialização/industrialização, com destaque na NF (CSOSN 101) e frase no campo complementar. Sem crédito de IPI/PIS/COFINS. 6ª faixa: ICMS 0% → sem crédito. Simulação — confira no PGDAS-D.
+</div>
+</div>
+
+<script>
+const FAIXAS = [
+  {n:"1ª", de:0,          ate:180000,    aliq:0.04,  pd:0,      rep:{IRPJ:0.055, CSLL:0.035, Cofins:0.1274, PIS:0.0276, CPP:0.415, ICMS:0.34}},
+  {n:"2ª", de:180000.01,  ate:360000,    aliq:0.073, pd:5940,    rep:{IRPJ:0.055, CSLL:0.035, Cofins:0.1274, PIS:0.0276, CPP:0.415, ICMS:0.34}},
+  {n:"3ª", de:360000.01,  ate:720000,    aliq:0.095, pd:13860,   rep:{IRPJ:0.055, CSLL:0.035, Cofins:0.1274, PIS:0.0276, CPP:0.42,  ICMS:0.335}},
+  {n:"4ª", de:720000.01,  ate:1800000,   aliq:0.107, pd:22500,   rep:{IRPJ:0.055, CSLL:0.035, Cofins:0.1274, PIS:0.0276, CPP:0.42,  ICMS:0.335}},
+  {n:"5ª", de:1800000.01, ate:3600000,   aliq:0.143, pd:87300,   rep:{IRPJ:0.055, CSLL:0.035, Cofins:0.1274, PIS:0.0276, CPP:0.42,  ICMS:0.335}},
+  {n:"6ª", de:3600000.01, ate:4800000,   aliq:0.19,  pd:378000,  rep:{IRPJ:0.135, CSLL:0.10,  Cofins:0.2827, PIS:0.0613, CPP:0.421, ICMS:0}},
+];
+const TRIBUTOS = ["IRPJ","CSLL","Cofins","PIS","CPP","ICMS"];
+function parseBR(s){
+  if(typeof s==="number") return s;
+  s=String(s||"").replace(/[^\d,.\-]/g,"").trim();
+  if(!s) return 0;
+  if(s.indexOf(",")>=0){ s=s.replace(/\./g,"").replace(",","."); }
+  const v=parseFloat(s); return isNaN(v)?0:v;
+}
+function fmtBRL(v){ return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"}); }
+function fmtPct(v,dec=5){ return (v*100).toLocaleString("pt-BR",{minimumFractionDigits:dec,maximumFractionDigits:dec})+"%"; }
+function fmtNum(v){ return v.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function maskBR(el){
+  el.addEventListener("input",()=>{
+    let d=el.value.replace(/\D/g,"").slice(0,13);
+    if(!d){el.value="";calcular();return;}
+    el.value=(parseInt(d,10)/100).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+    calcular();
+  });
+}
+["rbt12","recNormal","recST","valorNF"].forEach(id=>maskBR(document.getElementById(id)));
+function buildStatic(){
+  document.querySelector("#tabFaixas tbody").innerHTML=FAIXAS.map((f,i)=>
+    `<tr data-fx="${i}"><td><b class="blue">${f.n}</b></td><td class="n">R$ ${fmtNum(f.de)}</td><td class="n">R$ ${fmtNum(f.ate)}</td><td class="n">${fmtPct(f.aliq,2)}</td><td class="n">R$ ${fmtNum(f.pd)}</td></tr>`).join("");
+  document.querySelector("#tabRep tbody").innerHTML=FAIXAS.map((f,i)=>
+    `<tr data-fx="${i}"><td><b>${f.n}</b></td><td class="n">${fmtPct(f.rep.IRPJ,2)}</td><td class="n">${fmtPct(f.rep.CSLL,2)}</td><td class="n">${fmtPct(f.rep.Cofins,2)}</td><td class="n">${fmtPct(f.rep.PIS,2)}</td><td class="n">${fmtPct(f.rep.CPP,2)}</td><td class="n">${f.rep.ICMS===0?"-":fmtPct(f.rep.ICMS,2)}</td></tr>`).join("");
+}
+function marcaFaixa(idx){
+  document.querySelectorAll("#tabFaixas tbody tr, #tabRep tbody tr").forEach(r=>r.classList.toggle("atual",+r.dataset.fx===idx));
+}
+function faixaDe(rbt){ for(let i=0;i<FAIXAS.length;i++){ if(rbt<=FAIXAS[i].ate) return i; } return 5; }
+function copiarObs(){
+  const t=document.getElementById("obsNF").textContent;
+  if(navigator.clipboard&&t) navigator.clipboard.writeText(t);
+  else { const ta=document.createElement("textarea"); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand("copy")}catch(e){} ta.remove(); }
+}
+function calcular(){
+  const rbt=parseBR(document.getElementById("rbt12").value);
+  const recN=parseBR(document.getElementById("recNormal").value);
+  const recS=parseBR(document.getElementById("recST").value);
+  const vNF=parseBR(document.getElementById("valorNF").value);
+  const idx=rbt<=0?0:faixaDe(rbt);
+  const f=FAIXAS[idx];
+  const aliqEf=rbt<=0?f.aliq:Math.max(0,(rbt*f.aliq-f.pd)/rbt);
+  const aliqEfST=aliqEf*(1-f.rep.ICMS);
+  const aliqCred=aliqEf*f.rep.ICMS;
+  const dasN=recN*aliqEf, dasS=recS*aliqEfST, dasT=dasN+dasS;
+  const vCred=vNF*aliqCred;
+
+  document.getElementById("kFaixa").textContent=f.n;
+  document.getElementById("kAliq").textContent=fmtPct(f.aliq,2);
+  document.getElementById("kPD").textContent=fmtBRL(f.pd);
+  document.getElementById("kEf").textContent=fmtPct(aliqEf,5);
+  document.getElementById("kEfST").textContent=fmtPct(aliqEfST,5);
+  document.getElementById("kICMS").textContent=f.rep.ICMS===0?"— (0%)":fmtPct(f.rep.ICMS,2);
+  document.getElementById("kCredAliq").textContent=fmtPct(aliqCred,4);
+  marcaFaixa(idx);
+
+  let mem=`Alíquota Efetiva (${f.n} faixa, RBT12 mês anterior): R$ ${fmtNum(rbt)} × ${fmtPct(f.aliq,2)} − R$ ${fmtNum(f.pd)} = <b>${fmtPct(aliqEf,5)}</b> ÷ R$ ${fmtNum(rbt)}`+
+    `<br>Sem ICMS p/ ST: ${fmtPct(aliqEf,5)} × (1 − ${f.rep.ICMS===0?"0%":fmtPct(f.rep.ICMS,2)}) = <b>${fmtPct(aliqEfST,5)}</b>`+
+    `<br>Crédito NF: ${fmtBRL(vNF)} × ${fmtPct(aliqCred,4)} = <b>${fmtBRL(vCred)}</b>`;
+  if(rbt>4800000) mem+=`<br><b style="background:#fecaca">RBT12 acima de R$ 4.800.000,00 — fora do Simples.</b>`;
+  document.getElementById("memoria").innerHTML=mem;
+
+  document.getElementById("tRecN").textContent=fmtBRL(recN);
+  document.getElementById("tRecS").textContent=fmtBRL(recS);
+  document.getElementById("tAliqN").textContent=fmtPct(aliqEf,5);
+  document.getElementById("tAliqS").textContent=fmtPct(aliqEfST,5);
+  document.getElementById("tDasN").textContent=fmtBRL(dasN);
+  document.getElementById("tDasS").textContent=fmtBRL(dasS);
+  document.getElementById("tDasT").textContent=fmtBRL(dasT);
+  document.getElementById("dasTotal").textContent=fmtBRL(dasT);
+
+  // Crédito
+  document.getElementById("aliqCredito").value=(f.rep.ICMS===0?"0,0000%":fmtPct(aliqCred,4));
+  document.getElementById("credTotal").textContent=fmtBRL(vCred);
+  document.getElementById("obsNF").textContent=
+    `Permite o aproveitamento do crédito de ICMS no valor de ${fmtBRL(vCred)} correspondente à alíquota de ${fmtPct(aliqCred,4)}, nos termos do art. 23 da LC 123/2006. (Base ${fmtBRL(vNF)} · Faixa ${f.n})`;
+  document.getElementById("credAviso").textContent=
+    f.rep.ICMS===0 ? "6ª faixa: ICMS 0% no DAS → sem crédito a destacar (use CSOSN sem permissão de crédito)."
+    : "Na NF use CSOSN 101 e informe base, alíquota e valor acima. Válido só p/ comercialização/industrialização.";
+
+  document.getElementById("repInfo").textContent=`Faixa ${f.n} — efetivo = efetiva (${fmtPct(aliqEf,5)}) × % repartição. Com ST o ICMS é zero no DAS.`;
+  let totN=0,totS=0;
+  document.querySelector("#tabEfet tbody").innerHTML=TRIBUTOS.map(t=>{
+    const pr=f.rep[t], peN=aliqEf*pr, vN=recN*peN, vS=(t==="ICMS")?0:recS*peN;
+    totN+=vN; totS+=vS;
+    return `<tr><td class="l"><b>${t==="PIS"?"PIS/Pasep":t}</b></td><td class="n">${(t==="ICMS"&&pr===0)?"—":fmtPct(pr,2)}</td><td class="n">${fmtPct(peN,6)}</td><td class="n">${fmtBRL(vN)}</td><td class="n">${t==="ICMS"?fmtBRL(0)+" (ST)":fmtBRL(vS)}</td></tr>`;
+  }).join("");
+  document.getElementById("fEf").textContent=fmtPct(aliqEf,5);
+  document.getElementById("fValN").textContent=fmtBRL(totN);
+  document.getElementById("fValS").textContent=fmtBRL(totS);
+}
+function exemplo(){
+  document.getElementById("rbt12").value="560.548,70";
+  document.getElementById("recNormal").value="50.000,00";
+  document.getElementById("recST").value="10.000,00";
+  document.getElementById("valorNF").value="5.780,00";
+  calcular();
+}
+function limpar(){
+  ["rbt12","recNormal","recST","valorNF"].forEach(id=>document.getElementById(id).value="");
+  calcular();
+}
+buildStatic();
+calcular();
+</script>
+</body>
+</html>
